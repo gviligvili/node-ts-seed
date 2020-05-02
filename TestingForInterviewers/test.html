@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Socket.io</title>
+</head>
+<body>
+<h1>Serv. 1!</h1>
+<script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
+<script src="./testing.js"></script>
+<script>
+    connectToWS('ws://localhost:3000');
+</script>
+    <div>
+        <button onclick="spin()">Spin</button>
+        <button onclick="wild(2)">wild</button>
+        <button onclick="blast()">blast</button>
+    </div>
+</body>
+</html>

@@ -23,6 +23,7 @@ export interface SettingsInterface {
         host: string,
         port: string,
     }
+    jwtSecret: string,
 }
 
 const holder: SettingsInterface = {
@@ -37,7 +38,8 @@ const holder: SettingsInterface = {
     redis: {
         host: config.get('REDIS:HOST'),
         port: config.get('REDIS:PORT'),
-    }
+    },
+    jwtSecret: config.get("JWT_SECRET")
 };
 
 class Settings {

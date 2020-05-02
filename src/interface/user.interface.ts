@@ -1,9 +1,22 @@
 import {getDB} from "../config/DbConfig";
 import logger from "../util/logger";
 
-export interface registerUserInput { username: string, password:string}
+export interface RegisterUserInput { username: string, password:string}
+export interface FindUserInput { username: string }
 
-export async function registerUser({ username, password}: registerUserInput) {
+export async function findUser({ username }: FindUserInput) {
+    let results;
+    try {
+        results =  await getDB().execute(`SELECT username FROM users WHERE username = ?`, [username]);
+    } catch (e) {
+        logger.error("Unable to get user", { username, error: e.message});
+        throw new Error('Register failed')
+    }
+
+    return results
+}
+
+export async function registerUser({ username, password}: RegisterUserInput) {
     let results;
     try {
          results =  await getDB().execute(`INSERT INTO users (username, password) VALUES (?,?)`, [username, password]);
@@ -15,7 +28,7 @@ export async function registerUser({ username, password}: registerUserInput) {
     return results
 }
 
-export async function loginUser({ username, password}: registerUserInput) {
+export async function loginUser({ username, password}: RegisterUserInput) {
     let results = false;
     try {
         const [rows, fields] =  await getDB().execute(`SELECT * FROM users where username = ? AND password = ?`, [username, password]);

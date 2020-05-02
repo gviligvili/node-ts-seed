@@ -1,25 +1,70 @@
 /** Spin - send message to random user */
-import {loginUser, registerUser, registerUserInput} from "../interface/user.interface";
-import jwt from 'jsonwebtoken';
-export const spinController = (socket) => {
-    socket.emit('spin', {hello: 'spin'});
+import _ from 'lodash';
+import {loginUser, registerUser, RegisterUserInput} from "../interface/user.interface";
+import {generateJWT} from "../auth/auth";
+import {getSocketIO} from "./socket.service";
+import logger from "../util/logger";
+
+export const GENERAL_ROOM = 'Lobby';
+
+async function getRandomSocketsFromRoom(roomName: string, numberOfSockets: number, socketID: string): Promise<any>{
+    /** Side note to the testers, I didn't know if to exclude the sender socket,
+     * it's just sound logical that he should replay himself..
+     */
+    try {
+        const promise = new Promise((resolve, reject) => {
+            const io = getSocketIO();
+            io.of('/').in(roomName).clients(function(error, clients){
+                if (error) reject(error);
+                const clientsWithoutSender = clients.filter(x => x !== socketID);
+                resolve(_.sampleSize(clientsWithoutSender, numberOfSockets) as string[]);
+            });
+        })
+
+        const result = await promise;
+        return result as string[];
+    } catch (e) {
+        logger.error('Cant get all client in a room.', { roomName, error: e. message });
+        throw e;
+    }
 }
 
-/** wild - send a message to X random users. X will be determind by the client */
-export const wildController = (socket) => {
-    socket.emit('wild', {hello: 'wild'});
+/**
+ * spin - send a message to a random user.
+ **/
+export const spinController = async(socket, data) => {
+    const { payload } = data;
+    const result = await getRandomSocketsFromRoom(GENERAL_ROOM, 1, socket.id);
+    const recipient = result[0]
+
+    const io = getSocketIO();
+    io.to(recipient).emit('message', payload)
 }
 
-/** blast - sends message to all users */
-export const blastController = (socket) => {
-    socket.emit('blast', {hello: 'blast'});
+/**
+ * wild - send a message to X random users. X will be determind by the client
+ **/
+export const wildController = async(socket, data) => {
+    const { payload } = data;
+    const recipients = await getRandomSocketsFromRoom(GENERAL_ROOM, payload.wild, socket.id);
+
+    recipients.forEach(rec => socket.to(rec).emit('message', { message: payload.message }));
+}
+
+/**
+ * blast - sends message to all users
+ * */
+export const blastController = (socket, data) => {
+    const { payload } = data;
+
+    socket.nsp.to(GENERAL_ROOM).emit('message', payload);
 }
 
 /** register - simple user registration flow */
-export const registerController = async (socket, input: registerUserInput) => {
+export const registerController = async (socket, input: RegisterUserInput) => {
     try {
         await registerUser(input);
-        const token = jwt.sign({ username: input.username }, 'topsecret');
+        const token = generateJWT({ username: input.username });
 
         // create jwt token.
         socket.emit('loggedIn', {"status": 1, token: token});
@@ -29,10 +74,10 @@ export const registerController = async (socket, input: registerUserInput) => {
 }
 
 /** login - simple login flow */
-export const loginController = async (socket, input: registerUserInput) => {
+export const loginController = async (socket, input: RegisterUserInput) => {
     try {
         await loginUser(input);
-        const token = jwt.sign({ username: input.username }, 'topsecret');
+        const token = generateJWT({ username: input.username });
 
         // create jwt token.
         socket.emit('loggedIn', {"status": 1, token: token});
