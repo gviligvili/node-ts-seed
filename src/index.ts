@@ -1,13 +1,13 @@
 import {startServer} from "./server";
 import {initSocket, startSocketListening} from "./services/socket.service";
-import {DbConfig} from "./config/DbConfig";
+import {connectToDB} from "./config/DbConfig";
 
 /** Preload logic, insert here everything needs to be established before exposing the server.*/
 async function BootstrapLogic() {
-    await DbConfig.connect();
+    await connectToDB();
 }
 
-async function start() {
+export async function start() {
     await BootstrapLogic();
     const server = await startServer();
     initSocket(server);

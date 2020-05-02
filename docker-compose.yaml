@@ -1,5 +1,13 @@
 version: '3.7'
 services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server --appendonly yes
+    volumes:
+      - ./redis:/data
+    ports:
+      - 6379:6379
   db:
     image: mysql:5.7
     restart: always
@@ -17,3 +25,5 @@ services:
 # Names our volume
 volumes:
   my-db:
+
+

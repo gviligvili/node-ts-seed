@@ -3,8 +3,12 @@
   "PORT": 3000,
   "DB": {
     "HOST": "localhost",
-    "USER": "admin",
+    "USER": "root",
     "PASSWORD": "admin",
     "DATABASE": "test"
+  },
+  "REDIS": {
+    "HOST": "localhost",
+    "PORT": "6379"
   }
 }

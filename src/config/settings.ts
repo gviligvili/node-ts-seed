@@ -18,6 +18,11 @@ export interface SettingsInterface {
         password: string,
         database: string,
     }
+
+    redis: {
+        host: string,
+        port: string,
+    }
 }
 
 const holder: SettingsInterface = {
@@ -28,6 +33,10 @@ const holder: SettingsInterface = {
         user: config.get("DB:USER"),
         password: config.get("DB:PASSWORD"),
         database: config.get("DB:DATABASE"),
+    },
+    redis: {
+        host: config.get('REDIS:HOST'),
+        port: config.get('REDIS:PORT'),
     }
 };
 
