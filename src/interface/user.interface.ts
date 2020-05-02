@@ -32,12 +32,12 @@ export async function loginUser({ username, password}: RegisterUserInput) {
     let results = false;
     try {
         const [rows, fields] =  await getDB().execute(`SELECT * FROM users where username = ? AND password = ?`, [username, password]);
-        if (rows.length === 1) {
-            return true;
+        if (rows.length !== 1) {
+            throw new Error('Cant find user.')
         }
     } catch (e) {
-        logger.error("Unable to save user", { error: e.message});
-        throw new Error('Register failed')
+        logger.error("Unable to find user", { error: e.message});
+        throw new Error('Login failed')
     }
 
     return results

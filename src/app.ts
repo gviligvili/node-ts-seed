@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import { default as morgan } from "morgan";
 import Settings from "./config/settings";
-import {assignRoutes} from "./routes";
 
 const app = express();
 app.use(morgan("default"));
@@ -27,7 +26,5 @@ if (!Settings.isProduction()){
 }
 
 app.set("port", Settings.get().port);
-
-assignRoutes(app);
 
 export default app;
