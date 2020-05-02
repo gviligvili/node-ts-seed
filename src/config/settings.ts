@@ -12,11 +12,23 @@ const config = nconf.env().argv()
 export interface SettingsInterface {
     NODE_ENV: string;
     port: string;
+    db: {
+        host: string,
+        user: string,
+        password: string,
+        database: string,
+    }
 }
 
 const holder: SettingsInterface = {
     NODE_ENV: config.get("NODE_ENV"),
     port: config.get("PORT"),
+    db: {
+        host: config.get("DB:HOST"),
+        user: config.get("DB:USER"),
+        password: config.get("DB:PASSWORD"),
+        database: config.get("DB:DATABASE"),
+    }
 };
 
 class Settings {

@@ -29,7 +29,10 @@
         "lodash": "^4.17.15",
         "moment": "^2.24.0",
         "morgan": "^1.10.0",
+        "mysql": "github:mysqljs/mysql",
+        "mysql2": "^2.1.0",
         "nconf": "^0.10.0",
+        "socket.io": "^2.3.0",
         "winston": "^3.2.1",
         "winston-console-formatter": "^1.0.0-beta.3"
     },
