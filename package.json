@@ -1,0 +1,58 @@
+{
+    "name": "node-ts-seed",
+    "version": "0.1.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gviligvili/socialmap"
+    },
+    "author": "Tal Gvili",
+    "license": "MIT",
+    "scripts": {
+        "start": "ts-node-dev --respawn --inspect=0.0.0.0:9230 --  src/index.ts",
+        "start:prod": "node dist/index.js",
+        "build": " rm -rf dist && npm run tsc && npm run csa",
+        "test": "jest --forceExit --detectOpenHandles --coverage --verbose",
+        "watch-test": "npm run test -- --watchAll",
+        "build-ts": "tsc",
+        "watch-ts": "tsc -w",
+        "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+        "csa": "if test \"$NODE_ENV\" = \"development\" ; then ts-node copyStaticAssets.ts ; fi",
+        "tsc": "./node_modules/typescript/bin/tsc"
+    },
+    "dependencies": {
+        "axios": "^0.19.2",
+        "cors": "^2.8.5",
+        "errorhandler": "^1.5.1",
+        "express": "^4.17.1",
+        "express-validator": "^6.4.0",
+        "ioredis": "^4.16.2",
+        "lodash": "^4.17.15",
+        "moment": "^2.24.0",
+        "morgan": "^1.10.0",
+        "nconf": "^0.10.0",
+        "winston": "^3.2.1",
+        "winston-console-formatter": "^1.0.0-beta.3"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.2.11",
+        "@types/eslint": "^6.8.0",
+        "@types/jest": "^24.9.1",
+        "@types/lodash": "^4.14.149",
+        "@types/nconf": "^0.10.0",
+        "@types/node": "^12.12.35",
+        "@types/shelljs": "^0.8.7",
+        "@types/winston": "^2.4.4",
+        "@typescript-eslint/eslint-plugin": "^2.27.0",
+        "@typescript-eslint/parser": "^2.27.0",
+        "chai": "^4.2.0",
+        "eslint": "^6.8.0",
+        "jest": "^24.9.0",
+        "jest-mock-extended": "^1.0.8",
+        "nodemon": "^1.19.4",
+        "shelljs": "^0.8.3",
+        "ts-jest": "^24.3.0",
+        "ts-node": "^8.8.2",
+        "ts-node-dev": "^1.0.0-pre.44",
+        "typescript": "^3.8.3"
+    }
+}
