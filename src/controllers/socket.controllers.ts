@@ -1,11 +1,11 @@
 /** Spin - send message to random user */
-import _ from 'lodash';
+import _ from "lodash";
 import {loginUser, registerUser, RegisterUserInput} from "../interface/user.interface";
 import {decodeJWT, generateJWT} from "../auth/auth";
 import {getSocketIO} from "../services/socket.service";
 import logger from "../util/logger";
 
-export const GENERAL_ROOM = 'Lobby';
+export const GENERAL_ROOM = "Lobby";
 
 async function getRandomSocketsFromRoom(roomName: string, numberOfSockets: number, socketID: string): Promise<any> {
     /** Side note to the testers, I didn't know if to exclude the sender socket,
@@ -14,17 +14,17 @@ async function getRandomSocketsFromRoom(roomName: string, numberOfSockets: numbe
     try {
         const promise = new Promise((resolve, reject) => {
             const io = getSocketIO();
-            io.of('/').in(roomName).clients(function (error, clients) {
+            io.of("/").in(roomName).clients(function (error, clients) {
                 if (error) reject(error);
                 const clientsWithoutSender = clients.filter(x => x !== socketID);
                 resolve(_.sampleSize(clientsWithoutSender, numberOfSockets) as string[]);
             });
-        })
+        });
 
         const result = await promise;
         return result as string[];
     } catch (e) {
-        logger.error('Cant get all client in a room.', {roomName, error: e.message});
+        logger.error("Cant get all client in a room.", {roomName, error: e.message});
         throw e;
     }
 }
@@ -35,14 +35,14 @@ async function getRandomSocketsFromRoom(roomName: string, numberOfSockets: numbe
 export const spinController = async (socket, data) => {
     const {payload} = data;
     const decoded = decodeJWT(data.token);
-    const username = decoded.username
+    const username = decoded.username;
 
     const result = await getRandomSocketsFromRoom(GENERAL_ROOM, 1, socket.id);
-    const recipient = result[0]
+    const recipient = result[0];
 
     const io = getSocketIO();
-    io.to(recipient).emit('message', {message: payload.message, sender: username})
-}
+    io.to(recipient).emit("message", {message: payload.message, sender: username});
+};
 
 /**
  * wild - send a message to X random users. X will be determind by the client
@@ -50,12 +50,12 @@ export const spinController = async (socket, data) => {
 export const wildController = async (socket, data) => {
     const {payload} = data;
     const decoded = decodeJWT(data.token);
-    const username = decoded.username
+    const username = decoded.username;
 
     const recipients = await getRandomSocketsFromRoom(GENERAL_ROOM, payload.wild, socket.id);
 
-    recipients.forEach(rec => socket.to(rec).emit('message', {message: payload.message, sender: username}));
-}
+    recipients.forEach(rec => socket.to(rec).emit("message", {message: payload.message, sender: username}));
+};
 
 /**
  * blast - sends message to all users
@@ -65,8 +65,8 @@ export const blastController = (socket, data) => {
     const decoded = decodeJWT(data.token);
     const username = decoded.username;
 
-    socket.nsp.to(GENERAL_ROOM).emit('message', {message: payload.message, sender: username});
-}
+    socket.nsp.to(GENERAL_ROOM).emit("message", {message: payload.message, sender: username});
+};
 
 /** register - simple user registration flow */
 export const registerController = async (socket, input: RegisterUserInput) => {
@@ -75,11 +75,11 @@ export const registerController = async (socket, input: RegisterUserInput) => {
         const token = generateJWT({username: input.username});
 
         // create jwt token.
-        socket.emit('loggedIn', {"status": 1, token: token, username: input.username});
+        socket.emit("loggedIn", {"status": 1, token: token, username: input.username});
     } catch (e) {
-        socket.emit('loggedIn', {status: 0, error: e.message})
+        socket.emit("loggedIn", {status: 0, error: e.message});
     }
-}
+};
 
 /** login - simple login flow */
 export const loginController = async (socket, input: RegisterUserInput) => {
@@ -88,8 +88,8 @@ export const loginController = async (socket, input: RegisterUserInput) => {
         const token = generateJWT({username: input.username});
 
         // create jwt token.
-        socket.emit('loggedIn', {"status": 1, token: token, username: input.username});
+        socket.emit("loggedIn", {"status": 1, token: token, username: input.username});
     } catch (e) {
-        socket.emit('loggedIn', {status: 0, error: e.message})
+        socket.emit("loggedIn", {status: 0, error: e.message});
     }
-}
+};

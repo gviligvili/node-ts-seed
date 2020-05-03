@@ -13,17 +13,17 @@ export interface SettingsInterface {
     NODE_ENV: string;
     port: string;
     db: {
-        host: string,
-        user: string,
-        password: string,
-        database: string,
-    }
+        host: string;
+        user: string;
+        password: string;
+        database: string;
+    };
 
     redis: {
-        host: string,
-        port: string,
-    }
-    jwtSecret: string,
+        host: string;
+        port: string;
+    };
+    jwtSecret: string;
 }
 
 const holder: SettingsInterface = {
@@ -36,8 +36,8 @@ const holder: SettingsInterface = {
         database: config.get("DB:DATABASE"),
     },
     redis: {
-        host: config.get('REDIS:HOST'),
-        port: config.get('REDIS:PORT'),
+        host: config.get("REDIS:HOST"),
+        port: config.get("REDIS:PORT"),
     },
     jwtSecret: config.get("JWT_SECRET")
 };

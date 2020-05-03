@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import mysql from "mysql2/promise";
 
 import logger from "../util/logger";
 import Settings from "./settings";
@@ -25,7 +25,7 @@ export async function connectToDB() {
             password: dbConfig.password,
             database: dbConfig.database
         });
-        await setUp()
+        await setUp();
         logger.info("[dbConfig] Connected to MySql successfully");
     } catch (e) {
         logger.error(`[dbConfig] Failed to connect to MySql: ${e.message}`, {
