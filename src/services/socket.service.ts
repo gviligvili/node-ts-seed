@@ -25,7 +25,6 @@ export function initSocket(app: any) {
 
 export function startSocketListening() {
     _io.on('connection', (socket) => {
-        socket.emit('message', { "message" : 'Logged in'});
         socket.join(GENERAL_ROOM);
 
         socket.use(verifyUserMiddleware)
