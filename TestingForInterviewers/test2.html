@@ -2,19 +2,35 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
+    <script src="./testing.js"></script>
     <title>Serv 2</title>
 </head>
 <body>
-<h1>Serv. 2!</h1>
-<script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
-<script src="./testing.js"></script>
+<h1 id="greeting">Serv. 2!</h1>
 <script>
     connectToWS('ws://localhost:3001');
 </script>
-<div>
+<div id="auth">
+    <div id="register">
+        <h3> Register</h3>
+        <input type="text" id="register-username" name="register" placeholder="User id"><br>
+        <input type="text" id="register-password" name="register" placeholder="Password"><br>
+        <button onclick="register()">Register</button>
+    </div>
+    <div id="login">
+        <h3> login</h3>
+        <input type="text" id="login-username" name="register" placeholder="User id"><br>
+        <input type="text" id="login-password" name="register" placeholder="Password"><br>
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+<div id="actions" style="visibility: hidden;">
     <button onclick="spin()">Spin</button>
     <button onclick="wild(2)">wild</button>
     <button onclick="blast()">blast</button>
+</div>
+<div id="log" style="visibility: hidden;">
 </div>
 </body>
 </html>

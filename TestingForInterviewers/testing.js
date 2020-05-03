@@ -9,7 +9,10 @@ async function connectToWS(address) {
         }
 
         token = data.token
+        document.querySelector('#auth').style.display = "none";
         document.querySelector('#actions').style.visibility = "visible";
+        document.querySelector('#log').style.visibility = "visible";
+        document.querySelector('#greeting').textContent = `Hey, ${data.username}!`;
         console.log("Succefully Logged in");
     })
 
@@ -18,21 +21,21 @@ async function connectToWS(address) {
     })
 
     socket.on('message', (data) => {
-        console.log("New message", data.message)
+        addLog(`${data.sender}: ${data.message}`);
     })
 
 }
 
 function spin() {
-    socket.emit('spin', {token, payload: {"message": `Spin message from ${socket.id}`}});
+    socket.emit('spin', {token, payload: {"message": `Spin !`}});
 }
 
 function wild(numberOfPeople) {
-    socket.emit('wild', {token, payload: {"message": `Wild message from ${socket.id}.`, wild: numberOfPeople}});
+    socket.emit('wild', {token, payload: {"message": `Wild !`, wild: numberOfPeople}});
 }
 
 function blast() {
-    socket.emit('blast', {token, payload: {"message": `Blast from ${socket.id} !`}});
+    socket.emit('blast', {token, payload: {"message": `Blast !`}});
 }
 
 function register() {
@@ -45,4 +48,11 @@ function login() {
     const username = document.querySelector('#login-username').value
     const password = document.querySelector('#login-password').value
     socket.emit('login', {username, password});
+}
+
+function addLog(message){
+    const divNode = document.createElement("div");                       // Create a <p> node
+    const text = document.createTextNode(`${message}`);      // Create a text node
+    divNode.appendChild(text);
+    document.querySelector('#log').appendChild(divNode)
 }
