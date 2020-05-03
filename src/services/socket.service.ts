@@ -7,7 +7,7 @@ import {
     registerController,
     spinController,
     wildController
-} from "./socket.controllers";
+} from "../controllers/socket.controllers";
 import Settings from "../config/settings";
 const redisConfig = Settings.get().redis;
 import {verifyUserMiddleware} from "../auth/auth";

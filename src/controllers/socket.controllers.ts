@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import {loginUser, registerUser, RegisterUserInput} from "../interface/user.interface";
 import {decodeJWT, generateJWT} from "../auth/auth";
-import {getSocketIO} from "./socket.service";
+import {getSocketIO} from "../services/socket.service";
 import logger from "../util/logger";
 
 export const GENERAL_ROOM = 'Lobby';

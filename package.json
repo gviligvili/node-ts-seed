@@ -24,7 +24,6 @@
         "cors": "^2.8.5",
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
-        "express-validator": "^6.4.0",
         "ioredis": "^4.16.2",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
